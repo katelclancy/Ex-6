@@ -28,7 +28,9 @@ def build_bloom_filter(bad_words, size=2000, num_hashes=3):
     bit_array = [0] * size
     for word in bad_words:
         for seed in range(num_hashes):
-            index = mmh3.hash(word.lower(), seed) % size
+            # Simulate multiple hash functions by combining word with seed
+            combined = f"{word.lower()}_{seed}"
+            index = abs(hash(combined)) % size
             bit_array[index] = 1
     return bit_array
 
