@@ -27,7 +27,7 @@ def is_clean(line):
                 return True  # Not a bad word → allow the line
     return False  # Possibly a bad word → block the line
 
-b64_string = spark.read.text("hdfs:///user/katelclancy/bloom_filter.txt").collect()[0][0]
+b64_string = spark.read.text("hdfs:///user/yourname/bloom_filter.txt").collect()[0][0]
 
 # Decode from Base64
 byte_array = base64.b64decode(b64_string)
@@ -49,11 +49,12 @@ df = spark.readStream \
 # --- Step 6: Filter stream with Bloom Filter ---
 clean_df = df.filter(is_clean_udf(df["value"]))
 
-# --- Step 7: Write to console ---
+def print_only_value(row):
+    print(row["value"], flush=True)
+
 query = clean_df.writeStream \
+    .foreach(print_only_value) \
     .outputMode("append") \
-    .format("console") \
-    .option("truncate","false") \
     .start()
 
 query.awaitTermination()
