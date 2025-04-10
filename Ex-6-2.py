@@ -45,14 +45,15 @@ spark = SparkSession.builder \
 spark.sparkContext.setLogLevel("ERROR")
 
 # --- Step 4: Register Bloom Filter UDF ---
+
 def is_clean(line):
     words = line.split()
     for word in words:
-        for seed in range(3):
-            index = mmh3.hash(word.lower(), seed) % 2000
+        for seed in range(3):  # Simulate 3 hash functions
+            index = abs(hash(f"{word.lower()}_{seed}")) % 2000
             if bit_array[index] == 0:
-                return True  # Clean sentence, print
-    return False  # Dirty sentence, suppress
+                return True  # Not a bad word → allow the line
+    return False  # Possibly a bad word → block the line
 
 is_clean_udf = udf(is_clean, BooleanType())
 
