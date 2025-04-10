@@ -27,7 +27,7 @@ def is_clean(line):
                 return True  # Not a bad word → allow the line
     return False  # Possibly a bad word → block the line
 
-b64_string = spark.read.text("hdfs:///user/yourname/bloom_filter.txt").collect()[0][0]
+b64_string = spark.read.text("hdfs:///user/katelclancy/bloom_filter.txt").collect()[0][0]
 
 # Decode from Base64
 byte_array = base64.b64decode(b64_string)
