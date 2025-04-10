@@ -7,7 +7,6 @@ Created on Thu Apr 10 00:11:31 2025
 
 # bloom_filter_spark.py
 
-import mmh3
 import requests
 
 from pyspark.sql import SparkSession
