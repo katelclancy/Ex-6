@@ -72,6 +72,7 @@ clean_df = df.filter(is_clean_udf(df["value"]))
 query = clean_df.writeStream \
     .outputMode("append") \
     .format("console") \
+    .option("truncate","false") \
     .start()
 
 query.awaitTermination()
